@@ -1,0 +1,52 @@
+\documentclass{report}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\ifx\HCode\Undef
+\DeclareGraphicsExtensions{.pdf,.png}
+\else
+\usepackage{tex4ht}
+\DeclareGraphicsExtensions{.svg, .png, .jpg}
+\fi
+
+\begin{document}
+
+\title{From {\LaTeX} to HTML5}
+\author{Vicente Gonz\'alez Ruiz}
+
+\maketitle
+
+\part{This is a Part}
+\chapter{This is a Chapter}
+\section{This is a Section~\cite{greenwade93}}
+\subsection{This is a Subsection}
+\subsubsection{This is a Subsubsection}
+\paragraph{This is a Paragraph}
+\subparagraph{This is a Subparagraph}
+See Figure~\ref{fig:bottle}.
+
+\begin{figure}
+  \ifx \HCode\Undfef
+  \begin{center}
+    \includegraphics[width=1.0\textwidth]{klein_bottle}
+  \end{center}
+  \else
+  \HCode{
+    <div style="text-align:center;">
+    <img height="600" src="klein_bottle.svg" />
+    </div>
+  }
+  \fi
+  \caption{The Klein Bottle.\label{fig:bottle}}
+\end{figure}
+
+\begin{equation}
+  sin(x)^2 + cos(x)^2 = 1
+  \label{eq:pythagorean_identity}
+\end{equation}
+
+See the Pythagorean identity in (\ref{eq:pythagorean_identity}).
+
+\bibliographystyle{plain}
+\bibliography{index}
+
+\end{document}
