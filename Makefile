@@ -1,4 +1,4 @@
-default:	index1.html index2.html index3.html index4.html
+default:	index1.html index2.html index3.html
 
 # .gpt -> .fig
 %.fig:  %.gpt
@@ -32,17 +32,15 @@ klein_bottle.pdf:	klein_bottle.fig
 klein_bottle.svg:	klein_bottle.pdf
 
 index.pdf:	index.tex klein_bottle.pdf
-		pdflatex index # Inputs: .pdf, .jpg or .png.
+		pdflatex index
 		bibtex index
 		pdflatex index
 
 index1.html:	index.pdf klein_bottle.svg
-		htlatex index.tex # Inputs: .svg, .jpg or .png.
+		htlatex index.tex
 		mv index.html index1.html
 
 index2.html:	index.pdf klein_bottle.svg
-		#htlatex index.tex math.cfg, slides.cfg
-		#htlatex index.tex "slides.cfg, math.cfg, charset=utf-8, charset=utf-8 -cunihtf -utf-8"
 		htlatex index.tex htlatex.cfg " -cunihtf"
 		mv index.html index2.html
 
