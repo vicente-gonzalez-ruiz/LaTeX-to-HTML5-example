@@ -1,27 +1,28 @@
 default:	index1.html index2.html index3.html
 
-# .gpt -> .fig
-%.fig:  %.gpt
-	gnuplot $*.gpt
+## .gpt -> .tex + .pdf
+/tmp/%.tex:	%.gpt
+	(echo "set terminal cairolatex pdf; set output \"/tmp/$*.tex\"" | cat - $*.gpt) | gnuplot
 
-# .fig -> .pdf
-%.pdf:	%.fig
-	fig2dev -L pdftex $*.fig > $*_.pdf
-	fig2dev -L pdftex_t -p $*_.pdf $< > $*_.tex
-	pdflatex -jobname $* << EOF \
+## .tex + .eps -> .eps
+%.pdf: /tmp/%.tex
+	pdflatex << EOF \
 \\documentclass{minimal} \
 \\usepackage{graphicx} \
+\\usepackage{amsmath} \
+\\usepackage{amssymb} \
 \\usepackage{color} \
 \\begin{document} \
-\\resizebox{\\textwidth}{!}{\\input{$*_}} \
+\\pagestyle{empty} \
+\\thispagestyle{empty} \
+\\resizebox{1.0\\textwidth}{!}{\\input{/tmp/$*}} \
 \\end{document} \
 EOF
-	pdfcrop $*.pdf /tmp/figure.pdf
-	mv /tmp/figure.pdf $*.pdf
-	rm $*_.pdf
-	rm $*_.tex
-	rm $*.aux
-	rm $*.log
+	pdfcrop minimal.pdf $*.pdf
+	rm minimal.log
+	rm minimal.aux
+	rm minimal.pdf
+	rm /tmp/$*.pdf
 
 # .pdf -> .svg
 %.svg:	%.pdf
@@ -50,7 +51,7 @@ index3.html:	index.pdf klein_bottle.svg
 index4.html:	index.pdf klein_bottle.svg
 		pandoc --default-image-extension=svg --self-contained --to=revealjs index.tex --output=index4.html
 
-# Be carefully! This clean is specific for this project.
+# Be careful! This clean is specific for this project.
 clean:
 		rm -f *.html *.aux *.log *.4ct *.4tc *.bbl *.blg *.css *.lg *.tmp *.xref *.png *.fig *.pdf *.dvi *.idv *.bak *~
 
